@@ -3,6 +3,8 @@ function matchPattern(inputLine, pattern) {
     return inputLine.includes(pattern);
   } else if(pattern === '\\d'){
     return /\d/.test(inputLine);
+  } else if(pattern === '\\w'){
+    return /\w/.test(inputLine);
   } else {
     throw new Error(`Unhandled pattern ${pattern}`);
   }
