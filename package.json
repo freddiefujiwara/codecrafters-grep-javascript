@@ -4,12 +4,15 @@
     "description": "Build your own Grep challenge, from CodeCrafters",
     "main": "main.js",
     "scripts": {
-        "dev": "node app/main.js"
+        "bin": "node app/main.js",
+        "test": "npx jest"
     },
     "keywords": [
         "build-your-own-x"
     ],
     "author": "",
     "license": "MIT",
-    "dependencies": {}
+    "devDependencies": {
+        "jest": "^29.7.0"
+    }
 }
