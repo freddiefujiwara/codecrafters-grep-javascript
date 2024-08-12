@@ -1,10 +1,30 @@
+function isAlphaNumeric(code) {
+  return (code >= '0' && code <= '9') ||        // Numbers 0-9
+    (code >= 'A' && code <= 'Z') ||        // Uppercase letters A-Z
+    (code >= 'a' && code <= 'z');         // Lowercase letters a-z
+}
+
 function matchPattern(inputLine, pattern) {
   if (pattern.length === 1) {
     return inputLine.includes(pattern);
-  } else if(pattern === '\\d'){
-    return /\d/.test(inputLine);
-  } else if(pattern === '\\w'){
-    return /\w/.test(inputLine);
+  } else if(pattern.length === 2 && pattern.includes("d")){
+    return inputLine.split('')
+      .filter((d)=>{
+        return d >= '0' && d <= '9'
+      }).length > 0;
+  } else if(pattern.length === 2 && pattern.includes("w")){
+    return inputLine.split('')
+      .filter((c)=>{
+        return c === "_" || isAlphaNumeric(c)
+      }).length > 0;
+  } else if(pattern.length > 2 && pattern[0] === "[" && pattern[pattern.length - 1] === "]"){
+    const targets = pattern.split('');
+    targets.shift();
+    targets.pop();
+    return inputLine.split('')
+      .filter((c)=>{
+        return targets.includes(c);
+      }).length > 0;
   } else {
     throw new Error(`Unhandled pattern ${pattern}`);
   }
