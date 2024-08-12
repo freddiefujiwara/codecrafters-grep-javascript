@@ -84,7 +84,12 @@ function matchPlus(pattern, input) {
 
 function matchGroup(pattern, input) {
   const groupEnd = pattern.indexOf(")");
-  const groupPattern = pattern.slice(1, groupEnd);
+  let groupPattern = pattern.slice(1, groupEnd);
+
+  if (groupPattern.includes("|")) {
+    return matchAlternation(groupPattern, input) && match(pattern.slice(groupEnd + 1), input.slice(groupPattern.length));
+  }
+
   if (pattern[groupEnd + 1] === "?") {
     const remainderPattern = pattern.slice(groupEnd + 2); // +2 needed to slice off the ')?'
     return (
@@ -109,6 +114,16 @@ function matchGroup(pattern, input) {
       match(remainderPattern, input.slice(groupPattern.length))
     );
   }
+}
+
+function matchAlternation(pattern, input) {
+  const options = pattern.split("|");
+  for (const option of options) {
+    if (match(option, input.slice(0, option.length))) {
+      return true;
+    }
+  }
+  return false;
 }
 function main() {
   const pattern = process.argv[3];
