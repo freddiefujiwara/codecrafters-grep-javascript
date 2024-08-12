@@ -36,6 +36,8 @@ function match(pattern, input) {
     return matchQuestion(pattern, input);
   } else if (pattern[1] === "*") {
     return matchStar(pattern, input);
+  } else if (pattern[1] === "+") {
+    return matchPlus(pattern, input);
   } else if (pattern[0] === "(") {
     return matchGroup(pattern, input);
   } else if (pattern[0] === "\\") {
@@ -62,6 +64,24 @@ function matchStar(pattern, input) {
   );
 }
 
+function matchPlus(pattern, input) {
+  if (matchOne(pattern[0], input[0])) {
+    return matchStar(pattern, input.slice(1));
+  } else {
+    return false;
+  }
+}
+
+function matchPlus(pattern, input) {
+  if (!input) return false;
+  if (matchOne(pattern[0], input[0])) {
+    // Continue to match the remaining part of the pattern after '+'
+    return match(pattern.slice(2), input.slice(1)) || matchPlus(pattern, input.slice(1));
+  } else {
+    return false;
+  }
+}
+
 function matchGroup(pattern, input) {
   const groupEnd = pattern.indexOf(")");
   const groupPattern = pattern.slice(1, groupEnd);
@@ -79,6 +99,9 @@ function matchGroup(pattern, input) {
         match(pattern, input.slice(groupPattern.length))) ||
       match(remainderPattern, input)
     );
+  } else if (pattern[groupEnd + 1] === "+") {
+    const remainderPattern = pattern.slice(groupEnd + 2); // +2 needed to slice off the ')+'
+    return match(groupPattern, input.slice(0, groupPattern.length)) && matchPlus(groupPattern, input.slice(groupPattern.length));
   } else {
     const remainderPattern = pattern.slice(groupEnd + 1); // +1 needed to slice off the ')'
     return (
