@@ -10,10 +10,6 @@ function matchOne(pattern, input) {
     return /\w/.test(input); // "\w" matches any word character (alphanumeric + underscore)
   } else if (pattern[0] === "[") {
     const setEnd = pattern.indexOf("]");
-    if(pattern[1] === "^"){
-      const charSet = pattern.slice(2, setEnd);
-      return !charSet.includes(input); // Check if input's character is in the set
-    }
     const charSet = pattern.slice(1, setEnd);
     return charSet.includes(input); // Check if input's character is in the set
   } else {
@@ -87,21 +83,3 @@ function matchGroup(pattern, input) {
     );
   }
 }
-function main() {
-  const pattern = process.argv[3];
-  const input = require("fs").readFileSync(0, "utf-8").trim();
-
-  if (process.argv[2] !== "-E") {
-    console.log("Expected first argument to be '-E'");
-    process.exit(1);
-  }
-  console.log("Logs from your program will appear here");
-  if (search(pattern,input)) {
-    console.log("MATCH");
-    process.exit(0);
-  } else {
-    console.log("UNMATCH");
-    process.exit(1);
-  }
-}
-main();
