@@ -21,6 +21,12 @@ function matchPattern(inputLine, pattern) {
     const targets = pattern.split('');
     targets.shift();
     targets.pop();
+    if(targets[0] === "^"){
+      return inputLine.split('')
+        .filter((c)=>{
+          return !targets.includes(c);
+        }).length > 0;
+    }
     return inputLine.split('')
       .filter((c)=>{
         return targets.includes(c);
