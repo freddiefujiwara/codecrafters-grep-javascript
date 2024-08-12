@@ -85,13 +85,6 @@ function matchPattern(inputLine, matchers){
     }
     matchEnd = match[1];
     matchStart = match[0];
-    console.log({
-      matchStart,
-      matchEnd,
-      offset,
-      inputLine,
-      input,
-    });
     if (matchStart < 0) {
       return false;
     }
